@@ -8,47 +8,22 @@ repositories {
 }
 
 dependencies {
-    // Test frameworks
-    implementation 'io.cucumber:cucumber-java:7.14.0'
-    implementation 'io.cucumber:cucumber-testng:7.14.0'
-
-    // TestNG
-    implementation 'org.testng:testng:7.8.0'
-
-    // Web automation
-    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
-
-    // Assertions
-    implementation 'org.hamcrest:hamcrest:2.2'
-
-    // Reporting
-    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.22.0'
-    implementation 'io.qameta.allure:allure-testng:2.22.0'
-
-    // Logging
+    implementation 'org.seleniumhq.selenium:selenium-java:4.20.0'
+    implementation 'io.cucumber:cucumber-java:7.16.1'
+    implementation 'io.cucumber:cucumber-testng:7.16.1'
+    implementation 'org.testng:testng:7.10.1'
+    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
     implementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 test {
-    useTestNG() {
-        suites 'src/test/resources/testng.xml'
+    useTestNG {
+        include '**/TestRunner.class'
     }
-    systemProperties System.getProperties()
+    scanForTestClasses = false
 
-    // Disable configuration cache for this task
-    notCompatibleWithConfigurationCache("Test task has issue with configuration cache due to TestNG/Cucumber integration")
 }
 
 allure {
-    version = '2.22.0'
-    adapter {
-        frameworks {
-            testng {
-                adapterVersion = '2.22.0'
-            }
-            cucumberJvm {
-                adapterVersion = '2.22.0'
-            }
-        }
-    }
+    version = '2.24.0'
 }

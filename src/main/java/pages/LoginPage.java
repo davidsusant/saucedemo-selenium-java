@@ -4,25 +4,29 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import utils.DriverFactory;
 
 public class LoginPage {
-    private final WebDriver driver;
+    WebDriver driver;
 
     @FindBy(id = "user-name")
     private WebElement usernameField;
 
     @FindBy(id = "password")
-    private  WebElement passwordField;
+    private WebElement passwordField;
 
     @FindBy(id = "login-button")
     private WebElement loginButton;
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
+    @FindBy(className = "title")
+    private WebElement productsTitle;
+
+    public LoginPage() {
+        driver = DriverFactory.getDriver();
         PageFactory.initElements(driver, this);
     }
 
-    public void navigateTo() {
+    public void openLoginPage() {
         driver.get("https://www.saucedemo.com/");
     }
 
@@ -30,5 +34,9 @@ public class LoginPage {
         usernameField.sendKeys(username);
         passwordField.sendKeys(password);
         loginButton.click();
+    }
+
+    public boolean isOnProductPage() {
+        return productsTitle.isDisplayed();
     }
 }
