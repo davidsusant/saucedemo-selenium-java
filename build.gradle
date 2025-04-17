@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 repositories {
@@ -10,24 +11,44 @@ dependencies {
     // Test frameworks
     implementation 'io.cucumber:cucumber-java:7.14.0'
     implementation 'io.cucumber:cucumber-testng:7.14.0'
-    implementation 'io.cucumber:cucumber-core:7.14.0'
-    implementation 'org.testng:testng:7.7.1'
+
+    // TestNG
+    implementation 'org.testng:testng:7.8.0'
 
     // Web automation
     implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
 
     // Assertions
     implementation 'org.hamcrest:hamcrest:2.2'
-}
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
+    // Reporting
+    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.22.0'
+    implementation 'io.qameta.allure:allure-testng:2.22.0'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 test {
-    systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
-    systemProperty "browser", System.getProperty("browser", "chrome")
-    systemProperty "headless", System.getProperty("headless", "false")
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }
+    systemProperties System.getProperties()
+
+    // Disable configuration cache for this task
+    notCompatibleWithConfigurationCache("Test task has issue with configuration cache due to TestNG/Cucumber integration")
+}
+
+allure {
+    version = '2.22.0'
+    adapter {
+        frameworks {
+            testng {
+                adapterVersion = '2.22.0'
+            }
+            cucumberJvm {
+                adapterVersion = '2.22.0'
+            }
+        }
+    }
 }
